@@ -23,10 +23,7 @@ const CalcButton = ({
 }: Props) => {
   const ios = () => {
     return (
-      <TouchableOpacity
-        activeOpacity={0.8}
-        // style={[styles.fabLocation]}
-        onPress={onPress}>
+      <TouchableOpacity activeOpacity={0.8} onPress={onPress}>
         <View style={shape === 'oval' ? styles.ovalFab : styles.fab}>
           <Text style={styles.fabText}>{title}</Text>
         </View>
@@ -37,7 +34,6 @@ const CalcButton = ({
   const android = () => {
     if (colorScheme === 'lg') {
       return (
-        // <View style={[styles.fabLocation]}>
         <TouchableNativeFeedback
           onPress={onPress}
           background={TouchableNativeFeedback.Ripple('black', false, 30)}>
@@ -50,7 +46,6 @@ const CalcButton = ({
             <Text style={[styles.fabText, styles.lightGray]}>{title}</Text>
           </View>
         </TouchableNativeFeedback>
-        // </View>
       );
     } else if (colorScheme === 'dg') {
       return (
@@ -123,11 +118,6 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontWeight: 'normal',
     alignSelf: 'center',
-  },
-  fabLocation: {
-    // position: 'absolute',
-    // bottom: 25,
-    flex: 1,
   },
   lightGray: {
     backgroundColor: '#B2B2B1',
