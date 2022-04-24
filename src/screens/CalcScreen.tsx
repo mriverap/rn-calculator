@@ -1,120 +1,117 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 import React, {useState} from 'react';
 import CalcButton from '../components/CalcButton';
+import {styles} from '../../CalculatorTheme';
 
 export default function CalcScreen() {
   const [total, setTotal] = useState('0');
+  const [memValue, setMemValue] = useState(0);
+  const [operator, setOperator] = useState('');
 
-  const appendDigit = (digit: string): string => {
+  interface Operator {
+    value: '+' | '-' | '/' | '*';
+  }
+
+  const appendDigit = (digit: string): void => {
+    if (digit === '.' && total.includes('.')) {
+      return;
+    }
     setTotal(total === '0' ? digit : total + digit);
+  };
+
+  const applyOperator = (operatorVal: Operator.value): void => {
+    if (operator !== '') {
+      const newValue = parseFloat(total);
+      switch (operator) {
+        case '+':
+          // setTotal((parseFloat(total) + newValue).toString());
+          break;
+        case '-':
+          // setTotal((parseFloat(total) - newValue).toString());
+          break;
+        case '*':
+          // setTotal((parseFloat(total) * newValue).toString());
+          break;
+        case '/':
+          // setTotal((parseFloat(total) / newValue).toString());
+          break;
+        case '%':
+          break;
+        case '+/-':
+          break;
+      }
+      // setMemValue(parseFloat(total));
+    } else {
+      // setMemValue(parseFloat(total));
+      // setTotal('0');
+      // setOperator(operatorVal);
+    }
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.resultContainer}>
-        <Text style={styles.resultText}>{total}</Text>
+        <Text style={styles.resultText}>
+          {memValue !== 0 ? memValue : total}
+        </Text>
       </View>
       <View style={styles.buttonRow}>
-        <CalcButton title="C" colorScheme="lg" onPress={() => setTotal('0')} />
-        <CalcButton title="+/-" colorScheme="lg" />
-        <CalcButton title="%" colorScheme="lg" />
-        <CalcButton title="&#247;" colorScheme="org" />
+        <CalcButton title="C" colorGroup="other" action={() => setTotal('0')} />
+        <CalcButton
+          title="+/-"
+          colorGroup="other"
+          action={() => applyOperator('+/-')}
+        />
+        <CalcButton
+          title="%"
+          colorGroup="other"
+          action={() => applyOperator('%')}
+        />
+        <CalcButton
+          title="&#247;"
+          colorGroup="operators"
+          action={() => applyOperator('/')}
+        />
       </View>
       <View style={styles.buttonRow}>
+        <CalcButton title="7" action={() => appendDigit('7')} />
+        <CalcButton title="8" action={() => appendDigit('8')} />
+        <CalcButton title="9" action={() => appendDigit('9')} />
         <CalcButton
-          title="7"
-          colorScheme="dg"
-          onPress={() => appendDigit('7')}
+          title="x"
+          colorGroup="operators"
+          action={() => applyOperator('*')}
         />
-        <CalcButton
-          title="8"
-          colorScheme="dg"
-          onPress={() => appendDigit('8')}
-        />
-        <CalcButton
-          title="9"
-          colorScheme="dg"
-          onPress={() => appendDigit('9')}
-        />
-        <CalcButton title="x" colorScheme="org" />
       </View>
       <View style={styles.buttonRow}>
+        <CalcButton title="4" action={() => appendDigit('4')} />
+        <CalcButton title="5" action={() => appendDigit('5')} />
+        <CalcButton title="6" action={() => appendDigit('6')} />
         <CalcButton
-          title="4"
-          colorScheme="dg"
-          onPress={() => appendDigit('4')}
+          title="-"
+          colorGroup="operators"
+          action={() => applyOperator('-')}
         />
-        <CalcButton
-          title="5"
-          colorScheme="dg"
-          onPress={() => appendDigit('5')}
-        />
-        <CalcButton
-          title="6"
-          colorScheme="dg"
-          onPress={() => appendDigit('6')}
-        />
-        <CalcButton title="-" colorScheme="org" />
       </View>
       <View style={styles.buttonRow}>
+        <CalcButton title="1" action={() => appendDigit('1')} />
+        <CalcButton title="2" action={() => appendDigit('2')} />
+        <CalcButton title="3" action={() => appendDigit('3')} />
         <CalcButton
-          title="1"
-          colorScheme="dg"
-          onPress={() => appendDigit('1')}
+          title="+"
+          colorGroup="operators"
+          action={() => applyOperator('+')}
         />
-        <CalcButton
-          title="2"
-          colorScheme="dg"
-          onPress={() => appendDigit('2')}
-        />
-        <CalcButton
-          title="3"
-          colorScheme="dg"
-          onPress={() => appendDigit('3')}
-        />
-        <CalcButton title="+" colorScheme="org" />
       </View>
       <View style={styles.buttonRow}>
         <CalcButton
           title="0"
-          colorScheme="dg"
-          shape="oval"
-          onPress={() => appendDigit('0')}
+          shapeOval={true}
+          action={() => appendDigit('0')}
         />
-        <CalcButton
-          title="."
-          colorScheme="dg"
-          onPress={() => appendDigit('.')}
-        />
-        <CalcButton title="=" colorScheme="org" />
+        <CalcButton title="." action={() => appendDigit('.')} />
+        <CalcButton title="=" colorGroup="operators" />
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'black',
-    height: '100%',
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
-    paddingHorizontal: 5,
-    paddingBottom: 10,
-  },
-  resultContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
-  resultText: {
-    fontFamily: 'sans-serif-light',
-    fontSize: 80,
-    color: 'white',
-    marginHorizontal: 15,
-  },
-  buttonRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    margin: 5,
-    marginHorizontal: 10,
-  },
-});

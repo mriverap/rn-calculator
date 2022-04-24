@@ -1,134 +1,68 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  TouchableNativeFeedback,
-  Platform,
-} from 'react-native';
+import {Text, View, TouchableOpacity} from 'react-native';
 import React from 'react';
+import {styles} from '../../CalculatorTheme';
 
 interface Props {
   title: string;
-  colorScheme: 'lg' | 'dg' | 'org';
-  shape?: 'round' | 'oval';
-  onPress?: () => void; //Function,
+  colorGroup?: 'numbers' | 'operators' | 'other';
+  shapeOval?: boolean;
+  action?: () => void; //Function,
 }
 
 const CalcButton = ({
   title,
-  colorScheme = 'dg',
-  shape = 'round',
-  onPress,
+  colorGroup = 'numbers',
+  shapeOval = false,
+  action,
 }: Props) => {
-  const ios = () => {
-    return (
-      <TouchableOpacity activeOpacity={0.8} onPress={onPress}>
-        <View style={shape === 'oval' ? styles.ovalFab : styles.fab}>
-          <Text style={styles.fabText}>{title}</Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
-  const android = () => {
-    if (colorScheme === 'lg') {
+  switch (colorGroup) {
+    case 'operators':
       return (
-        <TouchableNativeFeedback
-          onPress={onPress}
-          background={TouchableNativeFeedback.Ripple('black', false, 30)}>
+        <TouchableOpacity onPress={action}>
           <View
-            style={
-              shape === 'oval'
-                ? [styles.ovalFab, styles.lightGray]
-                : [styles.fab, styles.lightGray]
-            }>
-            <Text style={[styles.fabText, styles.lightGray]}>{title}</Text>
+            style={[
+              styles.button,
+              styles.operatorButtons,
+              {width: shapeOval ? 160 : 80},
+            ]}>
+            <Text style={[styles.buttonText, styles.operatorButtonsText]}>
+              {title}
+            </Text>
           </View>
-        </TouchableNativeFeedback>
+        </TouchableOpacity>
       );
-    } else if (colorScheme === 'dg') {
+    case 'other':
       return (
-        <TouchableNativeFeedback
-          onPress={onPress}
-          background={TouchableNativeFeedback.Ripple('black', false, 30)}>
+        <TouchableOpacity onPress={action}>
           <View
-            style={
-              shape === 'oval'
-                ? [styles.ovalFab, styles.darkGray]
-                : [styles.fab, styles.darkGray]
-            }>
-            <Text style={[styles.fabText, styles.darkGray]}>{title}</Text>
+            style={[
+              styles.button,
+              {width: shapeOval ? 160 : 80},
+              styles.otherButtons,
+            ]}>
+            <Text style={[styles.buttonText, styles.otherButtonsText]}>
+              {title}
+            </Text>
           </View>
-        </TouchableNativeFeedback>
+        </TouchableOpacity>
       );
-    } else if (colorScheme === 'org') {
+    case 'numbers':
+    default:
       return (
-        <TouchableNativeFeedback
-          onPress={onPress}
-          background={TouchableNativeFeedback.Ripple('black', false, 30)}>
+        <TouchableOpacity onPress={action}>
           <View
-            style={
-              shape === 'oval'
-                ? [styles.ovalFab, styles.orange]
-                : [styles.fab, styles.orange]
-            }>
-            <Text style={[styles.fabText, styles.orange]}>{title}</Text>
+            style={[
+              styles.button,
+              styles.numberButtons,
+              {width: shapeOval ? 160 : 80},
+            ]}>
+            <Text style={[styles.buttonText, styles.numberButtonsText]}>
+              {title}
+            </Text>
           </View>
-        </TouchableNativeFeedback>
+        </TouchableOpacity>
       );
-    }
-  };
-
-  return Platform.OS === 'ios' ? ios() : android();
+  }
 };
 
 export default CalcButton;
-
-const styles = StyleSheet.create({
-  fab: {
-    width: 80,
-    height: 80,
-    borderRadius: 100,
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 4.65,
-    elevation: 8,
-  },
-  ovalFab: {
-    width: 180,
-    height: 80,
-    borderRadius: 100,
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 4.65,
-    elevation: 8,
-  },
-  fabText: {
-    fontSize: 40,
-    fontWeight: 'normal',
-    alignSelf: 'center',
-  },
-  lightGray: {
-    backgroundColor: '#B2B2B1',
-    color: 'black',
-  },
-  darkGray: {
-    backgroundColor: '#343231',
-    color: 'white',
-  },
-  orange: {
-    backgroundColor: '#FDB146',
-    color: 'white',
-  },
-});
