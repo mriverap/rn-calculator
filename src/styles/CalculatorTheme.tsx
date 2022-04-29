@@ -7,6 +7,9 @@ export const styles = StyleSheet.create({
     borderRadius: 100,
     justifyContent: 'center',
   },
+  buttonOval: {
+    width: 160,
+  },
   buttonText: {
     fontSize: 40,
     fontWeight: 'normal',
@@ -47,6 +50,12 @@ export const styles = StyleSheet.create({
     fontFamily: 'sans-serif-light',
     fontSize: 80,
     color: 'white',
+    marginHorizontal: 15,
+  },
+  memText: {
+    fontFamily: 'sans-serif-light',
+    fontSize: 20,
+    color: 'grey',
     marginHorizontal: 15,
   },
   buttonRow: {

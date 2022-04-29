@@ -1,116 +1,57 @@
 import {Text, View} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import CalcButton from '../components/CalcButton';
-import {styles} from '../../CalculatorTheme';
+import {styles} from '../styles/CalculatorTheme';
+import useCalculator from '../hooks/useCalculator';
 
 export default function CalcScreen() {
-  const [total, setTotal] = useState('0');
-  const [memValue, setMemValue] = useState(0);
-  const [operator, setOperator] = useState('');
-
-  interface Operator {
-    value: '+' | '-' | '/' | '*';
-  }
-
-  const appendDigit = (digit: string): void => {
-    if (digit === '.' && total.includes('.')) {
-      return;
-    }
-    setTotal(total === '0' ? digit : total + digit);
-  };
-
-  const applyOperator = (operatorVal: Operator.value): void => {
-    if (operator !== '') {
-      const newValue = parseFloat(total);
-      switch (operator) {
-        case '+':
-          // setTotal((parseFloat(total) + newValue).toString());
-          break;
-        case '-':
-          // setTotal((parseFloat(total) - newValue).toString());
-          break;
-        case '*':
-          // setTotal((parseFloat(total) * newValue).toString());
-          break;
-        case '/':
-          // setTotal((parseFloat(total) / newValue).toString());
-          break;
-        case '%':
-          break;
-        case '+/-':
-          break;
-      }
-      // setMemValue(parseFloat(total));
-    } else {
-      // setMemValue(parseFloat(total));
-      // setTotal('0');
-      // setOperator(operatorVal);
-    }
-  };
+  const {runningTotal, currentNumber, resetToZero, applyOperator, buildNumber} =
+    useCalculator();
 
   return (
     <View style={styles.container}>
       <View style={styles.resultContainer}>
-        <Text style={styles.resultText}>
-          {memValue !== 0 ? memValue : total}
+        <Text style={styles.memText} numberOfLines={1} adjustsFontSizeToFit>
+          {runningTotal !== '0' ? runningTotal : ''}
+        </Text>
+      </View>
+      <View style={styles.resultContainer}>
+        <Text style={styles.resultText} numberOfLines={1} adjustsFontSizeToFit>
+          {currentNumber}
         </Text>
       </View>
       <View style={styles.buttonRow}>
-        <CalcButton title="C" colorGroup="other" action={() => setTotal('0')} />
-        <CalcButton
-          title="+/-"
-          colorGroup="other"
-          action={() => applyOperator('+/-')}
-        />
-        <CalcButton
-          title="%"
-          colorGroup="other"
-          action={() => applyOperator('%')}
-        />
+        <CalcButton title="C" colorGroup="other" action={resetToZero} />
+        <CalcButton title="+/-" colorGroup="other" action={applyOperator} />
+        <CalcButton title="%" colorGroup="other" action={applyOperator} />
         <CalcButton
           title="&#247;"
           colorGroup="operators"
-          action={() => applyOperator('/')}
+          action={applyOperator}
         />
       </View>
       <View style={styles.buttonRow}>
-        <CalcButton title="7" action={() => appendDigit('7')} />
-        <CalcButton title="8" action={() => appendDigit('8')} />
-        <CalcButton title="9" action={() => appendDigit('9')} />
-        <CalcButton
-          title="x"
-          colorGroup="operators"
-          action={() => applyOperator('*')}
-        />
+        <CalcButton title="7" action={buildNumber} />
+        <CalcButton title="8" action={buildNumber} />
+        <CalcButton title="9" action={buildNumber} />
+        <CalcButton title="x" colorGroup="operators" action={applyOperator} />
       </View>
       <View style={styles.buttonRow}>
-        <CalcButton title="4" action={() => appendDigit('4')} />
-        <CalcButton title="5" action={() => appendDigit('5')} />
-        <CalcButton title="6" action={() => appendDigit('6')} />
-        <CalcButton
-          title="-"
-          colorGroup="operators"
-          action={() => applyOperator('-')}
-        />
+        <CalcButton title="4" action={buildNumber} />
+        <CalcButton title="5" action={buildNumber} />
+        <CalcButton title="6" action={buildNumber} />
+        <CalcButton title="-" colorGroup="operators" action={applyOperator} />
       </View>
       <View style={styles.buttonRow}>
-        <CalcButton title="1" action={() => appendDigit('1')} />
-        <CalcButton title="2" action={() => appendDigit('2')} />
-        <CalcButton title="3" action={() => appendDigit('3')} />
-        <CalcButton
-          title="+"
-          colorGroup="operators"
-          action={() => applyOperator('+')}
-        />
+        <CalcButton title="1" action={buildNumber} />
+        <CalcButton title="2" action={buildNumber} />
+        <CalcButton title="3" action={buildNumber} />
+        <CalcButton title="+" colorGroup="operators" action={applyOperator} />
       </View>
       <View style={styles.buttonRow}>
-        <CalcButton
-          title="0"
-          shapeOval={true}
-          action={() => appendDigit('0')}
-        />
-        <CalcButton title="." action={() => appendDigit('.')} />
-        <CalcButton title="=" colorGroup="operators" />
+        <CalcButton title="0" shapeOval action={buildNumber} />
+        <CalcButton title="." action={buildNumber} />
+        <CalcButton title="=" colorGroup="operators" action={applyOperator} />
       </View>
     </View>
   );
